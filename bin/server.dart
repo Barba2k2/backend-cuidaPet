@@ -4,6 +4,7 @@ import 'package:args/args.dart';
 import 'package:backend/src/config/application_config.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
+import 'package:shelf_router/shelf_router.dart';
 
 const _hostname = '0.0.0.0';
 
@@ -21,16 +22,14 @@ void main(List<String> args) async {
   }
 
   // AppConfig
+  final router = Router();
   final appConfig = ApplicationConfig();
   appConfig.loadConfigApplication();
 
   var handler = const shelf.Pipeline()
       .addMiddleware(shelf.logRequests())
-      .addHandler(_echoRequest);
+      .addHandler(router);
 
   var server = await io.serve(handler, _hostname, port);
   print('Serving at http://${server.address.host}:${server.port}');
 }
-
-shelf.Response _echoRequest(shelf.Request request) =>
-    shelf.Response.ok('Request for "${request.url}"');
