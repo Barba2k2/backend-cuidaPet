@@ -24,7 +24,7 @@ void main(List<String> args) async {
   // AppConfig
   final router = Router();
   final appConfig = ApplicationConfig();
-  appConfig.loadConfigApplication();
+  appConfig.loadConfigApplication(router);
 
   var handler = const shelf.Pipeline()
       .addMiddleware(shelf.logRequests())
