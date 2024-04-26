@@ -8,10 +8,11 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../database/database_connection.dart' as _i4;
-import '../database/i_database_connection.dart' as _i3;
+import '../../modules/user/controller/auth_controller.dart' as _i3;
+import '../database/database_connection.dart' as _i5;
+import '../database/i_database_connection.dart' as _i4;
 import 'databse_conncetion_configuration.dart'
-    as _i5; // ignore_for_file: unnecessary_lambdas
+    as _i6; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -25,7 +26,8 @@ _i1.GetIt $initGetIt(
     environment,
     environmentFilter,
   );
-  gh.lazySingleton<_i3.IDatabaseConnction>(
-      () => _i4.DatabaseConnection(get<_i5.DatabseConncetionConfiguration>()));
+  gh.factory<_i3.AuthController>(() => _i3.AuthController());
+  gh.lazySingleton<_i4.IDatabaseConnction>(
+      () => _i5.DatabaseConnection(get<_i6.DatabseConncetionConfiguration>()));
   return get;
 }

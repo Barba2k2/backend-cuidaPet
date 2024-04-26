@@ -1,5 +1,5 @@
-import 'package:backend/src/config/service_locator_config.dart';
-import 'package:backend/src/routers/router_configure.dart';
+import 'package:backend/app/config/service_locator_config.dart';
+import 'package:backend/app/routers/router_configure.dart';
 import 'package:dotenv/dotenv.dart' show load, env;
 import 'package:get_it/get_it.dart';
 import 'package:shelf_router/shelf_router.dart';
