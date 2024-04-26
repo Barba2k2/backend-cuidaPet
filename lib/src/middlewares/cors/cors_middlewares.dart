@@ -14,12 +14,12 @@ class CorsMiddlewares implements Middlewares {
         '${HttpHeaders.contentTypeHeader}, ${HttpHeaders.authorizationHeader}',
   };
 
-  // @override
-  // Handler innerHandler;
+  @override
+  late Handler innerHandler;
 
   @override
   Future<Response> execute(Request request) async {
-    if(request.method == 'OPTIONS') {
+    if (request.method == 'OPTIONS') {
       return Response(HttpStatus.ok, headers: headers);
     }
 
@@ -29,6 +29,6 @@ class CorsMiddlewares implements Middlewares {
 
   @override
   Handler handler(Handler innerHandler) {
-    throw UnimplementedError();
+    return innerHandler;
   }
 }

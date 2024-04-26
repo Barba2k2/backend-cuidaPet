@@ -10,7 +10,10 @@ class TesteController {
   @Route.get('/')
   Future<Response> find(Request request) async {
     log('Inciando response');
-    final resp = Response.ok(jsonEncode('{"message": "Hello World"}'));
+    final resp = Response.ok(
+      jsonEncode({'message': 'Hello World'}),
+      // headers: {'content-type': 'application/json'},
+    );
     log('Finalizando response');
     return resp;
   }

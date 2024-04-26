@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:backend/src/config/application_config.dart';
 import 'package:backend/src/middlewares/cors/cors_middlewares.dart';
+import 'package:backend/src/middlewares/defaultContentType/default_content_type.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_router/shelf_router.dart';
@@ -29,6 +30,9 @@ void main(List<String> args) async {
 
   var handler = const shelf.Pipeline()
       .addMiddleware(CorsMiddlewares().handler)
+      .addMiddleware(
+        DefaultContentType('application/josn; charset=utf-8').handler,
+      )
       .addMiddleware(shelf.logRequests())
       .addHandler(router);
 
