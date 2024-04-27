@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:backend/app/exceptions/user_exists_exception.dart';
-import 'package:backend/app/logger/i_logger.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../../../app/exceptions/user_exists_exception.dart';
+import '../../../app/logger/i_logger.dart';
 import '../service/I_user_service.dart';
 import '../view_models/user_save_input_model.dart';
 

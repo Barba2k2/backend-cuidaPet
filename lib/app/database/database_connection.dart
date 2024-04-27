@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../config/databse_conncetion_configuration.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
@@ -12,6 +14,15 @@ class DatabaseConnection implements IDatabaseConnction {
 
   @override
   Future<MySqlConnection> openConnection() {
+    log(
+      '''
+        ${_configuration.host} 
+        ${_configuration.port} 
+        ${_configuration.user} 
+        ${_configuration.password} 
+        ${_configuration.databaseName}
+        ''',
+    );
     return MySqlConnection.connect(
       ConnectionSettings(
         host: _configuration.host,

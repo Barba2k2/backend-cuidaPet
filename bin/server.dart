@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:backend/app/config/application_config.dart';
-import 'package:backend/app/middlewares/cors/cors_middlewares.dart';
-import 'package:backend/app/middlewares/defaultContentType/default_content_type.dart';
-import 'package:backend/app/middlewares/security/security_middleware.dart';
+import 'package:cuidapet_api/app/config/application_config.dart';
+import 'package:cuidapet_api/app/middlewares/cors/cors_middlewares.dart';
+import 'package:cuidapet_api/app/middlewares/defaultContentType/default_content_type.dart';
+import 'package:cuidapet_api/app/middlewares/security/security_middleware.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;

@@ -1,12 +1,12 @@
-import 'package:backend/app/database/i_database_connection.dart';
-import 'package:backend/app/exceptions/databse_exceptions.dart';
-import 'package:backend/app/helpers/crypt_helper.dart';
-import 'package:backend/app/logger/i_logger.dart';
-import 'package:backend/entities/user.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
+import '../../../app/database/i_database_connection.dart';
+import '../../../app/exceptions/databse_exceptions.dart';
 import '../../../app/exceptions/user_exists_exception.dart';
+import '../../../app/helpers/crypt_helper.dart';
+import '../../../app/logger/i_logger.dart';
+import '../../../entities/user.dart';
 import './i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
