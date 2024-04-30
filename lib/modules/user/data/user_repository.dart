@@ -4,6 +4,7 @@ import 'package:mysql1/mysql1.dart';
 import '../../../app/database/i_database_connection.dart';
 import '../../../app/exceptions/databse_exceptions.dart';
 import '../../../app/exceptions/user_exists_exception.dart';
+import '../../../app/exceptions/user_not_found_exception.dart';
 import '../../../app/helpers/crypt_helper.dart';
 import '../../../app/logger/i_logger.dart';
 import '../../../entities/user.dart';
@@ -59,7 +60,68 @@ class UserRepository implements IUserRepository {
         message: 'Error on creating user',
         exception: e,
       );
+    } finally {
+      await conn?.close();
+    }
+  }
 
+  @override
+  Future<User> loginWithEmailPassword(
+    String email,
+    String password,
+    bool supplierUser,
+  ) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      var query = '''
+        SELECT * 
+        FROM usuario 
+        WHERE 
+          email = ? AND 
+          senha = ?
+      ''';
+
+      if (supplierUser) {
+        query += ' AND fornecedor_id IS NOT NULL';
+      } else {
+        query += ' AND fornecedor_id IS NULL';
+      }
+
+      final result = await conn.query(
+        query,
+        [
+          email,
+          CryptHelper.generateSHA256Hash(password),
+        ],
+      );
+
+      if (result.isEmpty) {
+        log.error('User or password invalid!!');
+        throw UserNotFoundException(
+          message: 'User or password invalid!!',
+        );
+      } else {
+        final userSqlData = result.first;
+        return User(
+          id: userSqlData['id'] as int,
+          email: userSqlData['email'],
+          registerType: userSqlData['tipo_cadastro'],
+          iosToken: (userSqlData['ios_token'] as Blob?)?.toString(),
+          androidToken: (userSqlData['android_token'] as Blob?)?.toString(),
+          refreshToken: (userSqlData['refresh_token'] as Blob?)?.toString(),
+          imageAvatar: userSqlData['img_avatar'],
+          supplierId: userSqlData['fornecedor_id'],
+          socialKey: userSqlData['social_id'],
+        );
+      }
+    } catch (e, s) {
+      log.error('Error on login', e, s);
+      throw DatabseExceptions(
+        message: e.toString(),
+      );
     } finally {
       await conn?.close();
     }

@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cuidapet_api/app/exceptions/user_not_found_exception.dart';
+import 'package:cuidapet_api/app/helpers/jwt_helper.dart';
+import 'package:cuidapet_api/modules/user/view_models/login_view_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import '../../../app/exceptions/user_exists_exception.dart';
 import '../../../app/logger/i_logger.dart';
+import '../../../entities/user.dart';
 import '../service/I_user_service.dart';
 import '../view_models/user_save_input_model.dart';
 
@@ -21,6 +25,56 @@ class AuthController {
     required this.userService,
     required this.log,
   });
+
+  @Route.post('/')
+  Future<Response> login(Request request) async {
+    try {
+      final loginViewModel = LoginViewModel(
+        await request.readAsString(),
+      );
+
+      User user;
+
+      if (!loginViewModel.socialLogin) {
+        user = await userService.loginWithEmailPassword(
+          loginViewModel.login,
+          loginViewModel.password,
+          loginViewModel.supplierUser,
+        );
+      } else {
+        // Social Login (Google, Facebook, etc.)
+        user = User();
+      }
+
+      return Response.ok(
+        jsonEncode(
+          {
+            'access_token': JwtHelper.generateJwt(
+              user.id!,
+              user.supplierId,
+            ),
+          },
+        ),
+      );
+    } on UserNotFoundException {
+      return Response.forbidden(
+        jsonEncode(
+          {
+            'message': 'User or password invalid',
+          },
+        ),
+      );
+    } catch (e, s) {
+      log.error('Error on login', e, s);
+      return Response.internalServerError(
+        body: jsonEncode(
+          {
+            'message': 'Error on login',
+          },
+        ),
+      );
+    }
+  }
 
   @Route.post('/register')
   Future<Response> saveUser(Request request) async {
