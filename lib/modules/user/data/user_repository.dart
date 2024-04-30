@@ -114,7 +114,6 @@ class UserRepository implements IUserRepository {
           refreshToken: (userSqlData['refresh_token'] as Blob?)?.toString(),
           imageAvatar: userSqlData['img_avatar'],
           supplierId: userSqlData['fornecedor_id'],
-          socialKey: userSqlData['social_id'],
         );
       }
     } catch (e, s) {
@@ -122,6 +121,57 @@ class UserRepository implements IUserRepository {
       throw DatabseExceptions(
         message: e.toString(),
       );
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<User> loginByEmailSocialKey(
+    String email,
+    String socialKey,
+    String socialType,
+  ) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final result = await conn.query(
+        'SELECT * FROM usuario WHERE email = ?',
+        [email],
+      );
+
+      if (result.isEmpty) {
+        throw UserNotFoundException(
+          message: 'User not found',
+        );
+      } else {
+        final dataMysql = result.first;
+
+        if (dataMysql['social_id'] == null ||
+            dataMysql['sacial_id'] != socialKey) {
+          await conn.query(
+            'UPDATE usuario SET social_id = ?, tipo_cadastro = ? WHERE id = ?',
+            [
+              socialKey,
+              socialType,
+              dataMysql['id'],
+            ],
+          );
+        }
+
+        return User(
+          id: dataMysql['id'] as int,
+          email: dataMysql['email'],
+          registerType: dataMysql['tipo_cadastro'],
+          iosToken: (dataMysql['ios_token'] as Blob?)?.toString(),
+          androidToken: (dataMysql['android_token'] as Blob?)?.toString(),
+          refreshToken: (dataMysql['refresh_token'] as Blob?)?.toString(),
+          imageAvatar: dataMysql['img_avatar'],
+          supplierId: dataMysql['fornecedor_id'],
+        );
+      }
     } finally {
       await conn?.close();
     }

@@ -43,7 +43,12 @@ class AuthController {
         );
       } else {
         // Social Login (Google, Facebook, etc.)
-        user = User();
+        user = await userService.loginWithSocial(
+          loginViewModel.login,
+          loginViewModel.avatar,
+          loginViewModel.socialType,
+          loginViewModel.socialKey,
+        );
       }
 
       return Response.ok(
