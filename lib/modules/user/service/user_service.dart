@@ -1,3 +1,4 @@
+import 'package:cuidapet_api/modules/user/view_models/user_update_token_device_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 
@@ -132,7 +133,7 @@ class UserService implements IUserService {
       throw ServiceException(message: 'Error on validate refresh token');
     }
   }
-  
+
   @override
   Future<User> findById(int id) => userRepository.findById(id);
 
@@ -142,4 +143,12 @@ class UserService implements IUserService {
 
     return userRepository.findById(viewModel.userId);
   }
+
+  @override
+  Future<void> updateDeviceToken(UserUpdateTokenDeviceInputModel model) =>
+      userRepository.updateDeviceToken(
+        model.userId,
+        model.token,
+        model.platform,
+      );
 }

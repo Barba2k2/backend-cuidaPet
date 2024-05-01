@@ -1,3 +1,4 @@
+import 'package:cuidapet_api/modules/user/view_models/platform.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -292,7 +293,35 @@ class UserRepository implements IUserRepository {
       log.error('Error on update avatar', e, s);
       throw DatabseExceptions();
     } finally {
-      conn?.close();
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<void> updateDeviceToken(
+    int id,
+    String token,
+    Platform platform,
+  ) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      var setToken = '';
+      if (platform == Platform.ios) {
+        setToken = 'ios_token = ?';
+      } else {
+        setToken = 'android_token = ?';
+      }
+
+      final query = 'UPDATE usuario SET $setToken WHERE id = ?';
+      await conn.query(query, [token, id]);
+    } on MySqlException catch (e, s) {
+      log.error('Error on update device token', e, s);
+      throw DatabseExceptions();
+    } finally {
+      await conn?.close();
     }
   }
 }

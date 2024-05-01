@@ -1,3 +1,5 @@
+import '../view_models/platform.dart';
+
 import '../../../entities/user.dart';
 
 abstract class IUserRepository {
@@ -16,4 +18,5 @@ abstract class IUserRepository {
   Future<void> updateRefreshToken(User user);
   Future<User> findById(int id);
   Future<void> updateUrlAvatar(int id, String urlAvatar);
+  Future<void> updateDeviceToken(int id, String token, Platform platform);
 }
