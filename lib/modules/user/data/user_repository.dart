@@ -112,7 +112,7 @@ class UserRepository implements IUserRepository {
           iosToken: (userSqlData['ios_token'] as Blob?)?.toString(),
           androidToken: (userSqlData['android_token'] as Blob?)?.toString(),
           refreshToken: (userSqlData['refresh_token'] as Blob?)?.toString(),
-          imageAvatar: userSqlData['img_avatar'],
+          imageAvatar: (userSqlData['img_avatar'] as Blob?).toString(),
           supplierId: userSqlData['fornecedor_id'],
         );
       }
@@ -168,7 +168,7 @@ class UserRepository implements IUserRepository {
           iosToken: (dataMysql['ios_token'] as Blob?)?.toString(),
           androidToken: (dataMysql['android_token'] as Blob?)?.toString(),
           refreshToken: (dataMysql['refresh_token'] as Blob?)?.toString(),
-          imageAvatar: dataMysql['img_avatar'],
+          imageAvatar: (dataMysql['img_avatar'] as Blob?).toString(),
           supplierId: dataMysql['fornecedor_id'],
         );
       }
@@ -228,7 +228,41 @@ class UserRepository implements IUserRepository {
           user.refreshToken!,
           user.id,
         ],
-    );
+      );
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<User> findById(int id) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final result = await conn.query(
+        'SELECT * FROM usuario WHERE id = ?',
+        [id],
+      );
+
+      if (result.isEmpty) {
+        log.error('User not found with id: $id');
+        throw UserNotFoundException(message: 'User not found with id: $id');
+      } else {
+        final dataMysql = result.first;
+
+        return User(
+          id: dataMysql['id'] as int,
+          email: dataMysql['email'],
+          registerType: dataMysql['tipo_cadastro'],
+          iosToken: (dataMysql['ios_token'] as Blob?)?.toString(),
+          androidToken: (dataMysql['android_token'] as Blob?)?.toString(),
+          refreshToken: (dataMysql['refresh_token'] as Blob?)?.toString(),
+          imageAvatar: (dataMysql['img_avatar'] as Blob?).toString(),
+          supplierId: dataMysql['fornecedor_id'],
+        );
+      }
     } finally {
       await conn?.close();
     }

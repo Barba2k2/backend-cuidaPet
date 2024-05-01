@@ -20,4 +20,5 @@ abstract class IUserService {
   );
   Future<String> confirmLogin(UserConfirmInputModel inputModel);
   Future<RefreshTokenViewModel> refreshToken(UserRefreshTokenInputModel model);
+  Future<User> findById(int id);
 }
