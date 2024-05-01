@@ -13,6 +13,7 @@ import '../../../app/exceptions/user_exists_exception.dart';
 import '../../../app/logger/i_logger.dart';
 import '../../../entities/user.dart';
 import '../service/I_user_service.dart';
+import '../view_models/user_refresh_token_input_model.dart';
 import '../view_models/user_save_input_model.dart';
 
 part 'auth_controller.g.dart';
@@ -131,6 +132,41 @@ class AuthController {
         },
       ),
     );
+  }
+
+  @Route.put('/refresh')
+  Future<Response> refreshToken(Request request) async {
+    try {
+      final user = int.parse(request.headers['user']!);
+      final supplier = int.tryParse(request.headers['supplier'] ?? '');
+      final accessToken = request.headers['access_token']!;
+
+      final model = UserRefreshTokenInputModel(
+        user: user,
+        supplier: supplier,
+        accessToken: accessToken,
+        dataRequest: await request.readAsString(),
+      );
+
+      final userRefreshToken = await userService.refreshToken(model);
+
+      return Response.ok(
+        jsonEncode(
+          {
+            'access_token': userRefreshToken.accessToken,
+            'refresh_token': userRefreshToken.refreshToken,
+          },
+        ),
+      );
+    } catch (e) {
+      return Response.internalServerError(
+        body: jsonEncode(
+          {
+            'message': 'Error on update access_token',
+          },
+        ),
+      );
+    }
   }
 
   Router get router => _$AuthControllerRouter(this);

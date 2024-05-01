@@ -23,5 +23,10 @@ Router _$AuthControllerRouter(AuthController service) {
     r'/confirm',
     service.confirmLogin,
   );
+  router.add(
+    'PUT',
+    r'/refresh',
+    service.refreshToken,
+  );
   return router;
 }
