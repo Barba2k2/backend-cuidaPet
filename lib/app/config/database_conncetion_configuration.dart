@@ -1,11 +1,11 @@
-class DatabseConncetionConfiguration {
+class DatabaseConncetionConfiguration {
   final String host;
   final String user;
   final int port;
   final String password;
   final String databaseName;
 
-  DatabseConncetionConfiguration({
+  DatabaseConncetionConfiguration({
     required this.host,
     required this.user,
     required this.port,
