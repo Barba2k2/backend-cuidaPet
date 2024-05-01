@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cuidapet_api/app/helpers/jwt_helper.dart';
+import 'package:cuidapet_api/modules/user/view_models/user_confirm_input_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../app/exceptions/user_not_found_exception.dart';
@@ -49,7 +51,8 @@ class UserService implements IUserService {
     String socialKey,
   ) async {
     try {
-      return await userRepository.loginByEmailSocialKey(email, socialKey, socialType);
+      return await userRepository.loginByEmailSocialKey(
+          email, socialKey, socialType);
     } on UserNotFoundException catch (e) {
       log.error('User not found, creating a new user', e);
 
@@ -62,5 +65,21 @@ class UserService implements IUserService {
       );
       return await userRepository.createUser(user);
     }
+  }
+
+  @override
+  Future<String> confirmLogin(UserConfirmInputModel inputModel) async {
+    final refreshToken = JwtHelper.refreshToken(inputModel.accessToken);
+
+    final user = User(
+      id: inputModel.userId,
+      refreshToken: refreshToken,
+      iosToken: inputModel.iosDeviceToken,
+      androidToken: inputModel.androidDeviceToken,
+    );
+
+    await userRepository.updateUserDeviceTokenAndRefreshToken(user);
+
+    return refreshToken;
   }
 }

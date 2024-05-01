@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cuidapet_api/app/exceptions/user_not_found_exception.dart';
 import 'package:cuidapet_api/app/helpers/jwt_helper.dart';
 import 'package:cuidapet_api/modules/user/view_models/login_view_model.dart';
+import 'package:cuidapet_api/modules/user/view_models/user_confirm_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -104,6 +105,32 @@ class AuthController {
       log.error('Error on register user', e);
       return Response.internalServerError();
     }
+  }
+
+  @Route('PATCH', '/confirm')
+  Future<Response> confirmLogin(Request request) async {
+    final user = int.parse(request.headers['user']!);
+    final supplier = int.tryParse(request.headers['supplier'] ?? '');
+    final token = JwtHelper.generateJwt(user, supplier).replaceAll(
+      'Bearer ',
+      '',
+    );
+
+    final inputModel = UserConfirmInputModel(
+      userId: user,
+      accessToken: token,
+      data: await request.readAsString(),
+    );
+
+    final refreshToken = await userService.confirmLogin(inputModel);
+    return Response.ok(
+      jsonEncode(
+        {
+          'access_token': 'Bearer $token',
+          'refresh_token': refreshToken,
+        },
+      ),
+    );
   }
 
   Router get router => _$AuthControllerRouter(this);

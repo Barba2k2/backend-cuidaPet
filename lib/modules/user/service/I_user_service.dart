@@ -1,4 +1,5 @@
 import '../../../entities/user.dart';
+import '../view_models/user_confirm_input_model.dart';
 import '../view_models/user_save_input_model.dart';
 
 abstract class IUserService {
@@ -14,4 +15,5 @@ abstract class IUserService {
     String socialType,
     String socialKey,
   );
+  Future<String> confirmLogin(UserConfirmInputModel inputModel);
 }
