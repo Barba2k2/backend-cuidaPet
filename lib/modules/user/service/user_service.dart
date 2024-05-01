@@ -1,16 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cuidapet_api/app/helpers/jwt_helper.dart';
-import 'package:cuidapet_api/modules/user/view_models/refresh_token_view_model.dart';
-import 'package:cuidapet_api/modules/user/view_models/user_confirm_input_model.dart';
-import 'package:cuidapet_api/modules/user/view_models/user_refresh_token_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 import '../../../app/exceptions/service_exception.dart';
 import '../../../app/exceptions/user_not_found_exception.dart';
+import '../../../app/helpers/jwt_helper.dart';
 import '../../../app/logger/i_logger.dart';
 import '../../../entities/user.dart';
 import '../data/i_user_repository.dart';
+import '../view_models/refresh_token_view_model.dart';
+import '../view_models/update_url_avatar_view_model.dart';
+import '../view_models/user_confirm_input_model.dart';
+import '../view_models/user_refresh_token_input_model.dart';
 import '../view_models/user_save_input_model.dart';
 import 'I_user_service.dart';
 
@@ -135,4 +135,11 @@ class UserService implements IUserService {
   
   @override
   Future<User> findById(int id) => userRepository.findById(id);
+
+  @override
+  Future<User> updateAvatar(UpdateUrlAvatarViewModel viewModel) async {
+    await userRepository.updateUrlAvatar(viewModel.userId, viewModel.urlAvatar);
+
+    return userRepository.findById(viewModel.userId);
+  }
 }

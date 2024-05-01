@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cuidapet_api/modules/user/view_models/update_url_avatar_view_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -42,7 +43,44 @@ class UserController {
     } catch (e, s) {
       log.error('Error on finding user', e, s);
       return Response.internalServerError(
-          body: jsonEncode({'message': 'Error on finding user!'}));
+        body: jsonEncode(
+          {
+            'message': 'Error on finding user!',
+          },
+        ),
+      );
+    }
+  }
+
+  @Route.put('/avatar')
+  Future<Response> updateAvatar(Request request) async {
+    try {
+      final userId = int.parse(request.headers['user']!);
+      final updateUrlAvatarViewModel = UpdateUrlAvatarViewModel(
+        userId: userId,
+        dataRequest: await request.readAsString(),
+      );
+
+      final user = await userService.updateAvatar(updateUrlAvatarViewModel);
+
+      return Response.ok(
+        jsonEncode(
+          {
+            'email': user.email,
+            'register_type': user.registerType,
+            'img_avatar': user.imageAvatar,
+          },
+        ),
+      );
+    } catch (e, s) {
+      log.error('Error on update avatar', e, s);
+      return Response.internalServerError(
+        body: jsonEncode(
+          {
+            'message': 'Erro on update avatar',
+          },
+        ),
+      );
     }
   }
 
