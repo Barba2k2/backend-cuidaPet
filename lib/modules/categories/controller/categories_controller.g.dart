@@ -11,7 +11,7 @@ Router _$CategoriesControllerRouter(CategoriesController service) {
   router.add(
     'GET',
     r'/',
-    service.find,
+    service.findAll,
   );
   return router;
 }

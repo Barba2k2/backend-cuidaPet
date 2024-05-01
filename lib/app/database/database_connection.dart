@@ -1,12 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
-import '../config/databse_conncetion_configuration.dart';
+import '../config/database_conncetion_configuration.dart';
 import 'i_database_connection.dart';
 
 @LazySingleton(as: IDatabaseConnction)
 class DatabaseConnection implements IDatabaseConnction {
-  final DatabseConncetionConfiguration _configuration;
+  final DatabaseConncetionConfiguration _configuration;
 
   DatabaseConnection(this._configuration);
 
