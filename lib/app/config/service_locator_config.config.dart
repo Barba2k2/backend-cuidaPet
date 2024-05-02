@@ -22,7 +22,7 @@ import '../../modules/user/service/user_service.dart' as _i13;
 import '../database/database_connection.dart' as _i7;
 import '../database/i_database_connection.dart' as _i6;
 import '../logger/i_logger.dart' as _i11;
-import 'database_conncetion_configuration.dart'
+import 'database_connection_configuration.dart'
     as _i8; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
@@ -41,10 +41,10 @@ _i1.GetIt $initGetIt(
       () => _i3.CategoriesController(service: get<InvalidType>()));
   gh.lazySingleton<_i4.ICategoriesService>(
       () => _i5.CategoriesService(repository: get<InvalidType>()));
-  gh.lazySingleton<_i6.IDatabaseConnction>(
-      () => _i7.DatabaseConnection(get<_i8.DatabaseConncetionConfiguration>()));
+  gh.lazySingleton<_i6.IDatabaseConnection>(
+      () => _i7.DatabaseConnection(get<_i8.DatabaseConnectionConfiguration>()));
   gh.lazySingleton<_i9.IUserRepository>(() => _i10.UserRepository(
-        connection: get<_i6.IDatabaseConnction>(),
+        connection: get<_i6.IDatabaseConnection>(),
         log: get<_i11.ILogger>(),
       ));
   gh.lazySingleton<_i12.IUserService>(() => _i13.UserService(
@@ -60,7 +60,7 @@ _i1.GetIt $initGetIt(
         log: get<_i11.ILogger>(),
       ));
   gh.lazySingleton<_i16.ICategoriesRepository>(() => _i17.CategoriesRepository(
-        connection: get<_i6.IDatabaseConnction>(),
+        connection: get<_i6.IDatabaseConnection>(),
         log: get<_i11.ILogger>(),
       ));
   return get;

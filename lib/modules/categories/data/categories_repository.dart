@@ -9,7 +9,7 @@ import 'i_categories_repository.dart';
 
 @LazySingleton(as: ICategoriesRepository)
 class CategoriesRepository implements ICategoriesRepository {
-  IDatabaseConnction connection;
+  IDatabaseConnection connection;
   ILogger log;
 
   CategoriesRepository({

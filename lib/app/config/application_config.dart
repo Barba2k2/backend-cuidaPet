@@ -5,7 +5,7 @@ import 'package:shelf_router/shelf_router.dart';
 import '../logger/i_logger.dart';
 import '../logger/logger.dart';
 import '../routers/router_configure.dart';
-import 'database_conncetion_configuration.dart';
+import 'database_connection_configuration.dart';
 import 'service_locator_config.dart';
 
 class ApplicationConfig {
@@ -20,7 +20,7 @@ class ApplicationConfig {
   Future<void> _loadEnv() async => load();
 
   void _loadDatabaseConfig() {
-    final databseConfig = DatabaseConncetionConfiguration(
+    final databseConfig = DatabaseConnectionConfiguration(
       host: env['DATABASE_HOST'] ?? env['databaseHost']!,
       user: env['DATABASE_USER'] ?? env['databaseUser']!,
       port: int.tryParse(env['DATABASE_PORT'] ?? env['databasePort']!) ?? 0,

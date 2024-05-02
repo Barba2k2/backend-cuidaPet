@@ -13,7 +13,7 @@ import './i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
-  final IDatabaseConnction connection;
+  final IDatabaseConnection connection;
   final ILogger log;
 
   UserRepository({

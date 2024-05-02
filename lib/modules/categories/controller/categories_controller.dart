@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import 'package:cuidapet_api/modules/categories/service/I_categories_service.dart';
+import '../service/I_categories_service.dart';
 
 part 'categories_controller.g.dart';
 

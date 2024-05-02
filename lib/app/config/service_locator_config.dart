@@ -6,8 +6,8 @@ import 'service_locator_config.config.dart';
 final getIt = GetIt.instance;
 
 @InjectableInit(
-  initializerName: r'$initGetIt',
-  preferRelativeImports: true,
-  asExtension: false,
+  initializerName: r'$initGetIt', // default
+  preferRelativeImports: true, // default
+  asExtension: false, // default
 )
 void configureDependencies() => $initGetIt(getIt);
