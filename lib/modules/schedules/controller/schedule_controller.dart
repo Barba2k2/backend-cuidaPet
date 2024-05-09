@@ -44,5 +44,25 @@ class ScheduleController {
     }
   }
 
+  // /schedules/1/status/C => C = Confirmed
+  @Route.put('/<scheduleId|[0-9]+>/status/<status>')
+  Future<Response> changeStatus(
+    Request request,
+    String scheduleId,
+    String status,
+  ) async {
+    try {
+      await service.changeStatus(
+        status,
+        int.parse(scheduleId),
+      );
+
+      return Response.ok(jsonEncode({}));
+    } catch (e, s) {
+      log.error('Error on change schedule status', e, s);
+      return Response.internalServerError();
+    }
+  }
+
   Router get router => _$ScheduleControllerRouter(this);
 }

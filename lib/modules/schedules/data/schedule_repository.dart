@@ -78,4 +78,30 @@ class ScheduleRepository implements IScheduleRepository {
       await conn?.close();
     }
   }
+
+  @override
+  Future<void> changeStatus(String status, int scheduleId) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      await conn.query(
+        '''
+          UPDATE agendamento
+          SET status = ?
+          WHERE id = ?
+        ''',
+        [
+          status,
+          scheduleId,
+        ],
+      );
+    } on MySqlException catch (e, s) {
+      log.error('Error on change schedule status', e, s);
+      throw DatabaseExceptions();
+    } finally {
+      await conn?.close();
+    }
+  }
 }
