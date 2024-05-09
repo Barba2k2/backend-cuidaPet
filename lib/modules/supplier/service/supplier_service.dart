@@ -1,7 +1,8 @@
-import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../dtos/supplier_nearby_me_dto.dart';
+import '../../../entities/supplier.dart';
+import '../../../entities/supplier_service.dart' as entity;
 import '../data/i_supplier_repository.dart';
 import './i_supplier_service.dart';
 
@@ -24,4 +25,8 @@ class SupplierService implements ISupplierService {
 
   @override
   Future<Supplier?> findById(int id) => repository.findById(id);
+
+  @override
+  Future<List<entity.SupplierService>> findServicesBySupplier(int supplierId) =>
+      repository.findServicesBySupplierId(supplierId);
 }

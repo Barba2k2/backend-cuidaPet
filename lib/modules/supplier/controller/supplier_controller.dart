@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import '../../../app/logger/i_logger.dart';
+import '../../../entities/supplier.dart';
 import '../service/i_supplier_service.dart';
 
 part 'supplier_controller.g.dart';
@@ -93,6 +93,38 @@ class SupplierController {
         },
       },
     );
+  }
+
+  @Route.get('/<supplierId|[0-9]+>/services')
+  Future<Response> findServicesBySupplierId(
+    Request request,
+    String supplierId,
+  ) async {
+    try {
+      final supplierServices = await service.findServicesBySupplier(
+        int.parse(supplierId),
+      );
+
+      final result = supplierServices
+          .map((s) => {
+                'id': s.id,
+                'supplier_id': s.supplierId,
+                'name': s.name,
+                'price': s.price,
+              })
+          .toList();
+
+      return Response.ok(jsonEncode(result));
+    } catch (e, s) {
+      log.error('Error on find services', e, s);
+      return Response.internalServerError(
+        body: jsonEncode(
+          {
+            'message': 'Error on find services',
+          },
+        ),
+      );
+    }
   }
 
   Router get router => _$SupplierControllerRouter(this);
