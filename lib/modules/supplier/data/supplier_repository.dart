@@ -213,7 +213,7 @@ class SupplierRepository implements ISupplierRepository {
         ],
       );
 
-      return result.insertId!;
+      return result.insertId ?? 0;
     } on MySqlException catch (e, s) {
       log.error('Error on register new supplier', e, s);
       throw DatabaseExceptions();
