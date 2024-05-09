@@ -9,6 +9,6 @@ class ScheduleRouter implements IRouter {
   void configure(Router router) {
     final scheduleController = GetIt.I.get<ScheduleController>();
 
-    router.mount('schedules', scheduleController.router);
+    router.mount('/schedules/', scheduleController.router);
   }
 }
