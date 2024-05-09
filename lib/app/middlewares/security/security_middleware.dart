@@ -20,6 +20,10 @@ class SecurityMiddleware extends Middlewares {
       url: '/auth/',
       method: 'POST',
     ),
+    SecuritySkipUrl(
+      url: '/suppliers/user',
+      method: 'GET',
+    ),
   ];
 
   SecurityMiddleware(this.log);

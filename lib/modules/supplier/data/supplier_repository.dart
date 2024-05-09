@@ -164,4 +164,29 @@ class SupplierRepository implements ISupplierRepository {
       await conn?.close();
     }
   }
+
+  @override
+  Future<bool> checkUserEmailExists(String email) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final result = await conn.query(
+        'SELECT count(*) FROM usuario WHERE email = ?',
+        [
+          email,
+        ],
+      );
+
+      final dataSql = result.first;
+
+      return dataSql[0] > 0;
+    } on MySqlException catch (e, s) {
+      log.error('Error on checking user already exists', e, s);
+      throw DatabaseExceptions();
+    } finally {
+      await conn?.close();
+    }
+  }
 }
