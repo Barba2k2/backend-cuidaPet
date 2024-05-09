@@ -1,3 +1,4 @@
+import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../dtos/supplier_nearby_me_dto.dart';
@@ -20,4 +21,7 @@ class SupplierService implements ISupplierService {
         lng,
         DISTANCE,
       );
+
+  @override
+  Future<Supplier?> findById(int id) => repository.findById(id);
 }

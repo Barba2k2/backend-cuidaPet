@@ -1,3 +1,5 @@
+import 'package:cuidapet_api/entities/category.dart';
+import 'package:cuidapet_api/entities/supplier.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -58,6 +60,58 @@ class SupplierRepository implements ISupplierRepository {
           .toList();
     } on MySqlException catch (e, s) {
       log.error('Error on find suppliers near by me', e, s);
+      throw DatabaseExceptions();
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<Supplier?> findById(int id) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final query = '''
+        SELECT 
+            f.id, 
+            f.nome, 
+            f.logo, 
+            f.endereco, 
+            f.telefone, 
+            ST_X(f.latlng) as lat,
+            ST_X(f.latlng) as lng, 
+            f.categoria_fornecedor_id,
+            c.nome_categoria,
+            c.tipo_categoria
+        FROM fornecedor AS f
+        INNER JOIN categorias_fornecedor AS c 
+        ON (f.categorias_fornecedor_id = c.id)
+        WHERE f.id = ?
+      ''';
+
+      final result = await conn.query(query, [id]);
+
+      if (result.isNotEmpty) {
+        final dataSql = result.first;
+        return Supplier(
+          id: dataSql['id'],
+          name: dataSql['nome'],
+          logo: (dataSql['logo'] as Blob?)?.toString(),
+          address: dataSql['endereco'],
+          phone: dataSql['telefone'],
+          lat: dataSql['lat'],
+          lng: dataSql['lng'],
+          category: Category(
+            id: dataSql['categorias_fornecedor_id'],
+            name: dataSql['nome_categoria'],
+            type: dataSql['tipo_categoria'],
+          ),
+        );
+      }
+    } on MySqlException catch (e, s) {
+      log.error('Error on find supplier', e, s);
       throw DatabaseExceptions();
     } finally {
       await conn?.close();
