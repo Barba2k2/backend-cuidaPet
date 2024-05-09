@@ -1,5 +1,5 @@
 import 'package:cuidapet_api/app/database/i_database_connection.dart';
-import 'package:cuidapet_api/app/exceptions/databse_exceptions.dart';
+import 'package:cuidapet_api/app/exceptions/database_exceptions.dart';
 import 'package:cuidapet_api/app/logger/i_logger.dart';
 import 'package:cuidapet_api/dtos/supplier_nearby_me_dto.dart';
 import 'package:injectable/injectable.dart';
@@ -56,10 +56,9 @@ class SupplierRepository implements ISupplierRepository {
             ),
           )
           .toList();
-
     } on MySqlException catch (e, s) {
       log.error('Error on find suppliers near by me', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }

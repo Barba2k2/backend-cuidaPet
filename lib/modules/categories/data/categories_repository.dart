@@ -1,11 +1,11 @@
-import "package:injectable/injectable.dart";
+import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
 import '../../../app/database/i_database_connection.dart';
-import '../../../app/exceptions/databse_exceptions.dart';
+import '../../../app/exceptions/database_exceptions.dart';
 import '../../../app/logger/i_logger.dart';
 import '../../../entities/category.dart';
-import 'i_categories_repository.dart';
+import './i_categories_repository.dart';
 
 @LazySingleton(as: ICategoriesRepository)
 class CategoriesRepository implements ICategoriesRepository {
@@ -41,7 +41,7 @@ class CategoriesRepository implements ICategoriesRepository {
       return [];
     } on MySqlException catch (e, s) {
       log.error('Error on find supplier categories', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }

@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class DatabseExceptions implements Exception {
+class DatabaseExceptions implements Exception {
   String? message;
   Exception? exception;
 
-  DatabseExceptions({
+  DatabaseExceptions({
     this.message,
     this.exception,
   });

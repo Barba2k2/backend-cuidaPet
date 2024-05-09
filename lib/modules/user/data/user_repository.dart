@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
 import '../../../app/database/i_database_connection.dart';
-import '../../../app/exceptions/databse_exceptions.dart';
+import '../../../app/exceptions/database_exceptions.dart';
 import '../../../app/exceptions/user_exists_exception.dart';
 import '../../../app/exceptions/user_not_found_exception.dart';
 import '../../../app/helpers/crypt_helper.dart';
@@ -57,7 +57,7 @@ class UserRepository implements IUserRepository {
 
       log.error('Error on creating user', e, s);
 
-      throw DatabseExceptions(
+      throw DatabaseExceptions(
         message: 'Error on creating user',
         exception: e,
       );
@@ -119,7 +119,7 @@ class UserRepository implements IUserRepository {
       }
     } catch (e, s) {
       log.error('Error on login', e, s);
-      throw DatabseExceptions(
+      throw DatabaseExceptions(
         message: e.toString(),
       );
     } finally {
@@ -175,7 +175,7 @@ class UserRepository implements IUserRepository {
       }
     } on MySqlException catch (e, s) {
       log.error('Error on trying to login with social network', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }
@@ -214,7 +214,7 @@ class UserRepository implements IUserRepository {
       );
     } on MySqlException catch (e, s) {
       log.error('Error on confirm login', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }
@@ -235,7 +235,7 @@ class UserRepository implements IUserRepository {
       );
     } on MySqlException catch (e, s) {
       log.error('Error on update refresh token', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }
@@ -272,7 +272,7 @@ class UserRepository implements IUserRepository {
       }
     } on MySqlException catch (e, s) {
       log.error('Error on find user by id', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }
@@ -291,7 +291,7 @@ class UserRepository implements IUserRepository {
       );
     } on MySqlException catch (e, s) {
       log.error('Error on update avatar', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }
@@ -319,7 +319,7 @@ class UserRepository implements IUserRepository {
       await conn.query(query, [token, id]);
     } on MySqlException catch (e, s) {
       log.error('Error on update device token', e, s);
-      throw DatabseExceptions();
+      throw DatabaseExceptions();
     } finally {
       await conn?.close();
     }

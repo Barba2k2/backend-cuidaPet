@@ -7,8 +7,8 @@ import 'controller/categories_controller.dart';
 class CategoriesRouter implements IRouter {
   @override
   void configure(Router router) {
-    final categoireController = GetIt.I.get<CategoriesController>();
+    final categoryController = GetIt.I.get<CategoriesController>();
 
-    router.mount('/categories', categoireController.router);
+    router.mount('/categories/', categoryController.router);
   }
 }

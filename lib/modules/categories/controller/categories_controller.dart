@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import '../service/I_categories_service.dart';
+import '../service/i_categories_service.dart';
 
 part 'categories_controller.g.dart';
 
@@ -35,7 +34,7 @@ class CategoriesController {
       return Response.ok(
         jsonEncode(categoriesResponse),
       );
-    } catch (e) {
+    } catch (_) {
       return Response.internalServerError();
     }
   }
