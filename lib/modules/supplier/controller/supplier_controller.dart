@@ -193,7 +193,7 @@ class SupplierController {
       return Response.ok(
         _supplierMapper(supplierResponse),
       );
-    } on Exception catch (e, s) {
+    } catch (e, s) {
       log.error('Error on update supplier', e, s);
       return Response.internalServerError();
     }

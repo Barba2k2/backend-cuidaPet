@@ -66,7 +66,7 @@ class SecurityMiddleware extends Middlewares {
       final claimsMap = claims.toJson();
 
       final userId = claimsMap['sub'];
-      final supllierId = claimsMap['supllier'];
+      final supplierId = claimsMap['supplier'];
 
       if (userId == null) {
         throw JwtException.invalidToken;
@@ -75,7 +75,7 @@ class SecurityMiddleware extends Middlewares {
       final securityHeaders = {
         'user': userId,
         'access_token': authorizationToken,
-        'supllier': supllierId != null ? '$supllierId' : null,
+        'supplier': supplierId != null ? '$supplierId' : null,
       };
 
       return innerHandler(
