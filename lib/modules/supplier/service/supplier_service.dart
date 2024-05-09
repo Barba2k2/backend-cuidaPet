@@ -1,3 +1,4 @@
+import 'package:cuidapet_api/modules/supplier/view_models/supplier_update_input_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../dtos/supplier_nearby_me_dto.dart';
@@ -56,5 +57,21 @@ class SupplierService implements ISupplierService {
     );
 
     await userService.createUser(userInputModel);
+  }
+
+  @override
+  Future<Supplier> update(SupplierUpdateInputModel model) async {
+    var supplier = Supplier(
+      id: model.supplierId,
+      name: model.name,
+      address: model.address,
+      lat: model.lat,
+      lng: model.lng,
+      logo: model.logo,
+      phone: model.phone,
+      category: Category(id: model.categoryId),
+    );
+
+    return await repository.update(supplier);
   }
 }

@@ -75,7 +75,7 @@ class SecurityMiddleware extends Middlewares {
       final securityHeaders = {
         'user': userId,
         'access_token': authorizationToken,
-        'supllier': supllierId,
+        'supllier': supllierId != null ? '$supllierId' : null,
       };
 
       return innerHandler(

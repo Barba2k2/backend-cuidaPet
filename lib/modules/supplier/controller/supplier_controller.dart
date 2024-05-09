@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cuidapet_api/modules/supplier/view_models/supplier_update_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -163,6 +164,38 @@ class SupplierController {
           },
         ),
       );
+    }
+  }
+
+  @Route.put('/')
+  Future<Response> update(Request request) async {
+    try {
+      final supplier = int.tryParse(request.headers['supplier'] ?? '');
+
+      if (supplier == null) {
+        return Response(
+          400,
+          body: jsonEncode(
+            {
+              'message': "Supplier code can't be null",
+            },
+          ),
+        );
+      }
+
+      final model = SupplierUpdateInputModel(
+        supplierId: supplier,
+        dataRequest: await request.readAsString(),
+      );
+
+      final supplierResponse = await service.update(model);
+
+      return Response.ok(
+        _supplierMapper(supplierResponse),
+      );
+    } on Exception catch (e, s) {
+      log.error('Error on update supplier', e, s);
+      return Response.internalServerError();
     }
   }
 
