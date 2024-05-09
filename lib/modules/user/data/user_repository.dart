@@ -1,4 +1,3 @@
-import 'package:cuidapet_api/modules/user/view_models/platform.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -9,6 +8,7 @@ import '../../../app/exceptions/user_not_found_exception.dart';
 import '../../../app/helpers/crypt_helper.dart';
 import '../../../app/logger/i_logger.dart';
 import '../../../entities/user.dart';
+import '../view_models/platform.dart';
 import './i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)

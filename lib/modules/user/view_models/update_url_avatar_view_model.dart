@@ -1,4 +1,4 @@
-import 'package:cuidapet_api/app/helpers/request_mapping.dart';
+import '../../../app/helpers/request_mapping.dart';
 
 class UpdateUrlAvatarViewModel extends RequestMapping {
   int userId;

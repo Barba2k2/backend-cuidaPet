@@ -1,10 +1,10 @@
-import 'package:cuidapet_api/app/database/i_database_connection.dart';
-import 'package:cuidapet_api/app/exceptions/database_exceptions.dart';
-import 'package:cuidapet_api/app/logger/i_logger.dart';
-import 'package:cuidapet_api/dtos/supplier_nearby_me_dto.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
+import '../../../app/database/i_database_connection.dart';
+import '../../../app/exceptions/database_exceptions.dart';
+import '../../../app/logger/i_logger.dart';
+import '../../../dtos/supplier_nearby_me_dto.dart';
 import './i_supplier_repository.dart';
 
 @LazySingleton(as: ISupplierRepository)

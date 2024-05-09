@@ -1,4 +1,3 @@
-import 'package:cuidapet_api/modules/user/view_models/user_update_token_device_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 
@@ -13,6 +12,7 @@ import '../view_models/update_url_avatar_view_model.dart';
 import '../view_models/user_confirm_input_model.dart';
 import '../view_models/user_refresh_token_input_model.dart';
 import '../view_models/user_save_input_model.dart';
+import '../view_models/user_update_token_device_input_model.dart';
 import 'I_user_service.dart';
 
 @LazySingleton(as: IUserService)
