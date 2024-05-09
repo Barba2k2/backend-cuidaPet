@@ -13,7 +13,7 @@ import '../view_models/user_confirm_input_model.dart';
 import '../view_models/user_refresh_token_input_model.dart';
 import '../view_models/user_save_input_model.dart';
 import '../view_models/user_update_token_device_input_model.dart';
-import 'I_user_service.dart';
+import 'i_user_service.dart';
 
 @LazySingleton(as: IUserService)
 class UserService implements IUserService {

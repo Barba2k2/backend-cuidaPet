@@ -189,4 +189,36 @@ class SupplierRepository implements ISupplierRepository {
       await conn?.close();
     }
   }
+
+  @override
+  Future<int> saveSupplier(Supplier supplier) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final result = await conn.query(
+        ''' INSERT INTO fornecedor 
+              (nome, logo, endereco, telefone, latlng, categorias_fornecedor_id) 
+            VALUES
+              (?, ?, ?, ?, ST_GeomFromText(?), ?)
+        ''',
+        [
+          supplier.name,
+          supplier.logo,
+          supplier.address,
+          supplier.phone,
+          'POINT(${supplier.lat ?? 0} ${supplier.lng ?? 0})',
+          supplier.category?.id,
+        ],
+      );
+
+      return result.insertId!;
+    } on MySqlException catch (e, s) {
+      log.error('Error on register new supplier', e, s);
+      throw DatabaseExceptions();
+    } finally {
+      await conn?.close();
+    }
+  }
 }

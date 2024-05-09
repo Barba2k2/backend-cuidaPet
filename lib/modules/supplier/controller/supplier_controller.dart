@@ -8,6 +8,7 @@ import 'package:shelf_router/shelf_router.dart';
 import '../../../app/logger/i_logger.dart';
 import '../../../entities/supplier.dart';
 import '../service/i_supplier_service.dart';
+import '../view_models/create_supplier_view_model.dart';
 
 part 'supplier_controller.g.dart';
 
@@ -144,6 +145,25 @@ class SupplierController {
     final isEmailExists = await service.checkUserEmailExists(email);
 
     return isEmailExists ? Response(200) : Response(404);
+  }
+
+  @Route.post('/user')
+  Future<Response> createUser(Request request) async {
+    try {
+      final model = CreateSupplierViewModel(await request.readAsString());
+      await service.createUserSupplier(model);
+
+      return Response.ok(jsonEncode(''));
+    } catch (e, s) {
+      log.error('Error on create a new supplier and new user', e, s);
+      return Response.internalServerError(
+        body: jsonEncode(
+          {
+            'message': 'Error on create a new supplier and new user',
+          },
+        ),
+      );
+    }
   }
 
   Router get router => _$SupplierControllerRouter(this);
