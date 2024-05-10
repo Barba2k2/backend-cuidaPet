@@ -75,7 +75,7 @@ class ChatRepository implements IChatRepository {
         FROM 
           chats AS c
         INNER JOIN
-          agendamentos a 
+          agendamento a 
         ON
           a.id = c.agendamento_id
         INNER JOIN
