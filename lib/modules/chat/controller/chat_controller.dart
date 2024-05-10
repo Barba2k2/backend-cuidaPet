@@ -65,5 +65,37 @@ class ChatController {
     }
   }
 
+  @Route.get('/user')
+  Future<Response> findChatsByUser(Request request) async {
+    try {
+      final user = int.parse(request.headers['user']!);
+
+      final chats = await service.getChatsByUser(user);
+
+      final resultChats = chats
+          .map(
+            (c) => {
+              'id': c.id,
+              'user': c.user,
+              'name': c.name,
+              "pet_name": c.petName,
+              'supplier': {
+                'id': c.supplier.id,
+                'name': c.supplier.name,
+                'logo': c.supplier.logo,
+              },
+            },
+          )
+          .toList();
+
+      return Response.ok(
+        jsonEncode(resultChats),
+      );
+    } catch (e, s) {
+      log.error('Error on finding chats by user', e, s);
+      return Response.internalServerError();
+    }
+  }
+
   Router get router => _$ChatControllerRouter(this);
 }
