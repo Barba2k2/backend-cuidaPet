@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cuidapet_api/modules/supplier/view_models/supplier_update_input_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -10,6 +9,7 @@ import '../../../app/logger/i_logger.dart';
 import '../../../entities/supplier.dart';
 import '../service/i_supplier_service.dart';
 import '../view_models/create_supplier_view_model.dart';
+import '../view_models/supplier_update_input_model.dart';
 
 part 'supplier_controller.g.dart';
 

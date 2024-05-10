@@ -1,4 +1,3 @@
-import 'package:cuidapet_api/modules/supplier/view_models/supplier_update_input_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../dtos/supplier_nearby_me_dto.dart';
@@ -9,6 +8,7 @@ import '../../user/service/i_user_service.dart';
 import '../../user/view_models/user_save_input_model.dart';
 import '../data/i_supplier_repository.dart';
 import '../view_models/create_supplier_view_model.dart';
+import '../view_models/supplier_update_input_model.dart';
 import './i_supplier_service.dart';
 
 @LazySingleton(as: ISupplierService)

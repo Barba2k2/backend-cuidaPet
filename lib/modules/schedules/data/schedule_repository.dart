@@ -1,11 +1,11 @@
-import 'package:cuidapet_api/app/exceptions/database_exceptions.dart';
-import 'package:cuidapet_api/entities/schedule.dart';
-import 'package:cuidapet_api/entities/schedule_supplier_service.dart';
-import 'package:cuidapet_api/entities/supplier.dart';
-import 'package:cuidapet_api/entities/supplier_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mysql1/mysql1.dart';
 
+import '../../../app/exceptions/database_exceptions.dart';
+import '../../../entities/schedule.dart';
+import '../../../entities/schedule_supplier_service.dart';
+import '../../../entities/supplier.dart';
+import '../../../entities/supplier_service.dart';
 import '../../../app/database/i_database_connection.dart';
 import '../../../app/logger/i_logger.dart';
 import './i_schedule_repository.dart';
@@ -133,6 +133,70 @@ class ScheduleRepository implements IScheduleRepository {
           f.id = a.fornecedor_id
         WHERE 
           a.usuario_id = ?
+        ORDER BY
+          a.data_agendamento DESC
+      ''';
+
+      final result = await conn.query(
+        query,
+        [userId],
+      );
+
+      final scheduleResultFuture = result
+          .map(
+            (s) async => Schedule(
+              id: s['id'],
+              scheduleDate: s['data_agendamento'],
+              status: s['status'],
+              name: s['nome'],
+              petName: s['nome_pet'],
+              userId: userId,
+              supplier: Supplier(
+                id: s['fornec_id'],
+                name: s['fornec_nome'],
+                logo: (s['logo'] as Blob?).toString(),
+              ),
+              services: await findAllServicesBySchedule(s['id']),
+            ),
+          )
+          .toList();
+
+      return Future.wait(scheduleResultFuture);
+    } on MySqlException catch (e, s) {
+      log.error('Error when seeking services from a user', e, s);
+      throw DatabaseExceptions();
+    } finally {
+      await conn?.close();
+    }
+  }
+
+  @override
+  Future<List<Schedule>> findAllSchedulesByUserSupplier(int userId) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      final query = '''
+        SELECT 
+          a.id,
+          a.data_agendamento,
+          a.status,
+          a.nome,
+          a.nome_pet,
+          f.id AS fornec_id,
+          f.nome AS fornec_nome,
+          f.logo
+        FROM 
+          agendamento AS a
+        INNER JOIN 
+          fornecedor f
+        INNER JOIN
+          usuario u
+        ON
+          u.fornecedor_id = f.id
+        WHERE 
+          u.id = ?
         ORDER BY
           a.data_agendamento DESC
       ''';
