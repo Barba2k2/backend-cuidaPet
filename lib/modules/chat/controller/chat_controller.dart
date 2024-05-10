@@ -1,14 +1,47 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:injectable/injectable.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../../../app/logger/i_logger.dart';
+import '../service/i_chat_service.dart';
+
 part 'chat_controller.g.dart';
 
+@Injectable()
 class ChatController {
-  @Route.get('/')
-  Future<Response> find(Request request) async {
-    return Response.ok(jsonEncode(''));
+  final IChatService service;
+  final ILogger log;
+
+  ChatController({
+    required this.service,
+    required this.log,
+  });
+
+  // chats/schedule/1/start-chat
+  @Route.post('/schedule/<scheduleId>/start-chat')
+  Future<Response> startChatByScheduleId(
+    Request request,
+    String scheduleId,
+  ) async {
+    try {
+      final chatId = await service.startChat(
+        int.parse(scheduleId),
+      );
+
+      return Response.ok(
+        jsonEncode(
+          {
+            'chat_id': chatId,
+          },
+        ),
+      );
+    } catch (e, s) {
+      log.error('Error on starting chat', e, s);
+      return Response.internalServerError();
+    }
   }
 
   Router get router => _$ChatControllerRouter(this);

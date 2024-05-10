@@ -9,9 +9,9 @@ part of 'chat_controller.dart';
 Router _$ChatControllerRouter(ChatController service) {
   final router = Router();
   router.add(
-    'GET',
-    r'/',
-    service.find,
+    'POST',
+    r'/schedule/<scheduleId>/start-chat',
+    service.startChatByScheduleId,
   );
   return router;
 }
