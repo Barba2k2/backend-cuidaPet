@@ -18,5 +18,10 @@ Router _$ScheduleControllerRouter(ScheduleController service) {
     r'/<scheduleId|[0-9]+>/status/<status>',
     service.changeStatus,
   );
+  router.add(
+    'GET',
+    r'/',
+    service.findAllSchedulesByUser,
+  );
   return router;
 }
