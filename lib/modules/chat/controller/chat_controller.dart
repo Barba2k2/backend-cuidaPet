@@ -114,27 +114,44 @@ class ChatController {
 
     final supplierId = int.parse(supplier);
 
-    final chats = await service.getChatsBySupplier(supplierId);
+    try {
+      final chats = await service.getChatsBySupplier(supplierId);
 
-    final resultChats = chats
-        .map(
-          (c) => {
-            'id': c.id,
-            'user': c.user,
-            'name': c.name,
-            "pet_name": c.petName,
-            'supplier': {
-              'id': c.supplier.id,
-              'name': c.supplier.name,
-              'logo': c.supplier.logo,
+      final resultChats = chats
+          .map(
+            (c) => {
+              'id': c.id,
+              'user': c.user,
+              'name': c.name,
+              "pet_name": c.petName,
+              'supplier': {
+                'id': c.supplier.id,
+                'name': c.supplier.name,
+                'logo': c.supplier.logo,
+              },
             },
-          },
-        )
-        .toList();
+          )
+          .toList();
 
-    return Response.ok(
-      jsonEncode(resultChats),
-    );
+      return Response.ok(
+        jsonEncode(resultChats),
+      );
+    } catch (e, s) {
+      log.error('Error on finding chats by supplier $supplierId', e, s);
+      return Response.internalServerError();
+    }
+  }
+
+  @Route.put('/<chatId>/end-chat')
+  Future<Response> endChat(Request request, String chatId) async {
+    try {
+      await service.endChat(int.parse(chatId));
+
+      return Response.ok(jsonEncode({}));
+    } catch (e, s) {
+      log.error('Error on finishing chat $chatId', e, s);
+      return Response.internalServerError();
+    }
   }
 
   Router get router => _$ChatControllerRouter(this);

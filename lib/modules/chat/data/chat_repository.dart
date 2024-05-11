@@ -43,7 +43,7 @@ class ChatRepository implements IChatRepository {
 
       return result.insertId!;
     } on MySqlException catch (e, s) {
-      log.error('Error on startChat', e, s);
+      log.error('Error on start chatting', e, s);
       throw DatabaseExceptions();
     } finally {
       await conn?.close();
@@ -246,6 +246,29 @@ class ChatRepository implements IChatRepository {
           .toList();
     } on MySqlException catch (e, s) {
       log.error('Error on finding chats of supplier', e, s);
+      throw DatabaseExceptions();
+    } finally {
+      await conn?.close();
+    }
+  }
+  
+  @override
+  Future<void> endChat(int chatId) async {
+    MySqlConnection? conn;
+
+    try {
+      conn = await connection.openConnection();
+
+      await conn.query(
+        '''
+          UPDATE chats SET STATUS = 'F' WHERE id = ?
+        ''',
+        [
+          chatId,
+        ],
+      );
+    } on MySqlException catch (e, s) {
+      log.error('Error on finishing chat', e, s);
       throw DatabaseExceptions();
     } finally {
       await conn?.close();
