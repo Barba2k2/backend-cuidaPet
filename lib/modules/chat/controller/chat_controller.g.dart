@@ -23,5 +23,10 @@ Router _$ChatControllerRouter(ChatController service) {
     r'/user',
     service.findChatsByUser,
   );
+  router.add(
+    'GET',
+    r'/supplier',
+    service.findChatsBySupplier,
+  );
   return router;
 }

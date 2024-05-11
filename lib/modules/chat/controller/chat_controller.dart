@@ -97,5 +97,45 @@ class ChatController {
     }
   }
 
+  @Route.get('/supplier')
+  Future<Response> findChatsBySupplier(Request request) async {
+    final supplier = request.headers['supplier'];
+
+    if (supplier == null) {
+      return Response(
+        400,
+        body: jsonEncode(
+          {
+            "message": "The logged user isn't a supplier",
+          },
+        ),
+      );
+    }
+
+    final supplierId = int.parse(supplier);
+
+    final chats = await service.getChatsBySupplier(supplierId);
+
+    final resultChats = chats
+        .map(
+          (c) => {
+            'id': c.id,
+            'user': c.user,
+            'name': c.name,
+            "pet_name": c.petName,
+            'supplier': {
+              'id': c.supplier.id,
+              'name': c.supplier.name,
+              'logo': c.supplier.logo,
+            },
+          },
+        )
+        .toList();
+
+    return Response.ok(
+      jsonEncode(resultChats),
+    );
+  }
+
   Router get router => _$ChatControllerRouter(this);
 }
