@@ -11,6 +11,7 @@ class JwtHelper {
       issuer: 'cuidapet',
       subject: userId.toString(),
       expiry: DateTime.now().add(const Duration(days: 1)),
+      // expiry: DateTime.now().add(const Duration(seconds: 30)),
       notBefore: DateTime.now(),
       issuedAt: DateTime.now(),
       otherClaims: <String, dynamic>{
@@ -27,10 +28,14 @@ class JwtHelper {
   }
 
   static String refreshToken(String accessToken) {
+    // final env = GetIt.I.get<ApplicationConfig>();
+    // final expiry = int.parse(env['refreseh_token_expire_days']!);
+    // final notBefore = int.parse(env['refresh_token_not_before_hours']!);
+
     final claimSet = JwtClaim(
       issuer: accessToken,
       subject: 'RefreshToken',
-      // expiry: DateTime.now().add(const Duration(days: 20)),
+      expiry: DateTime.now().add(const Duration(days: 20)),
       notBefore: DateTime.now().add(Duration(hours: 12)),
       issuedAt: DateTime.now(),
       otherClaims: <String, dynamic>{},
